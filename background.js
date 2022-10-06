@@ -9,6 +9,9 @@ chrome.runtime.onInstalled.addListener(() => {
     console.log("hey")
     //console.log(document.body.innerText)
 })
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    console.log("from content script: ", request)
+})
 // function setPageBackgroundColor() {
 //     console.log(document.body.innerText)
 // }
