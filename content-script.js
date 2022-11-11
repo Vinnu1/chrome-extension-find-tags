@@ -1,12 +1,24 @@
-//console.log("yo")
-//console.log(document.body.innerText)
-let bodyText = document.body.innerText.toLowerCase()
-//console.log(bodyText)
-chrome.storage.sync.get("tags", ({ tags }) => {
-    //console.log("tags:", tags)
-})
 
-// chrome.runtime.onMessage.addListener(msgObj => {
-//     // do something with msgObj
-chrome.runtime.sendMessage({ bodyText })
-//});
+let bodyText = document.body.innerText.toLowerCase()
+let currentTags
+
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        console.log('req: ', request, 'sender: ', sender, 'sendResponse: ', sendResponse)
+        // console.log(sender.tab ?
+        //     "from a content script:" + sender.tab.url :
+        //     "from the extension");
+        if (request.task === "is_tag_present") {
+            chrome.storage.sync.get("tags", ({ tags }) => {
+                if (tags != null && tags.length > 0) {
+                    currentTags = tags
+                }
+                else {
+                    currentTags = false
+                }
+                sendResponse({ result: currentTags });
+            })
+        }
+        return true;
+    }
+);

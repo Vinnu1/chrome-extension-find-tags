@@ -1,4 +1,4 @@
-//console.log("popup")
+console.log("popup")
 let changeColor = document.getElementById("changeColor")
 
 //code related to tags
@@ -22,7 +22,7 @@ tags.addEventListener("keypress", (e) => {
 })
 
 function createTag(tagTitle) {
-    console.log("tagTitle:", tagTitle)
+    //console.log("tagTitle:", tagTitle)
     let tag = document.createElement('div')
     let deleteBtn = document.createElement('span')
     deleteBtn.addEventListener("click", () => {
@@ -54,24 +54,58 @@ function getTags() {
     })
 }
 
-// window.addEventListener("DOMContentLoaded", () => {
-chrome.tabs.query({
-    active: true,
-    currentWindow: true
-}, tabs => {
-    // ...and send a request for the DOM info...
-    chrome.tabs.sendMessage(
-        tabs[0].id,
-        { from: 'popup', subject: 'DOMInfo' },
-        // ...also specifying a callback to be called 
-        //    from the receiving end (content script).
-        setDOMInfo);
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { task: "is_tag_present" }, function (response) {
+        console.log(response.result);
+    });
 });
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//     // console.log("request from: ", request.from)
+//     // console.log(request, sender, sendResponse);
+//     sendResponse(50)
 // })
 
-function setDOMInfo(data) {
-    console.log("setDomInfo called: ", data)
-}
+
+// var port = chrome.extension.connect({
+//     name: "Sample Communication"
+// });
+// port.postMessage("Hi BackGround");
+// port.onMessage.addListener(function (msg) {
+//     console.log("message recieved" + msg);
+// });
+
+// window.addEventListener("DOMContentLoaded", () => {
+//chrome tabs query
+// chrome.tabs.query({
+//     active: true,
+//     currentWindow: true
+// }, tabs => {
+//     // ...and send a request for the DOM info...
+//     chrome.tabs.sendMessage(
+//         tabs[0].id,
+//         { from: 'popup', subject: 'DOMInfo' },
+//         // ...also specifying a callback to be called
+//         //    from the receiving end (content script).
+//         setDOMInfo);
+// });
+// })
+//chrome.runtime.sendMessage({ result: false })
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//     console.log("request from: ", request.from)
+//     console.log(request, sender, sendResponse);
+//     sendResponse(50)
+// })
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//     console.log("popup was called")
+//     if (request.msg === "popup_result") {
+//         //  To do something
+//         console.log("in popup:", request.result)
+//     }
+// })
+
+// function setDOMInfo(data) {
+//     console.log("setDomInfo called: ", data)
+// }
 
 // getText()
 
