@@ -1,5 +1,7 @@
 console.log("popup")
 let changeColor = document.getElementById("changeColor")
+const resultSpan = document.getElementById("resultSpan")
+const searchButton = document.getElementById("searchButton")
 
 //code related to tags
 const tags = document.getElementById("tags")
@@ -12,12 +14,16 @@ getTags()
 tags.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
         console.log("key is pressed")
-        if (tagArr.indexOf(tags.value) == -1) {
-            tagArr.push(tags.value)
+        let tagValue = tags.value.toLowerCase()
+        if (tagArr.indexOf(tagValue) == -1) {
+            tagArr.push(tagValue)
             chrome.storage.sync.set({ tags: tagArr })
-            createTag(tags.value)
+            createTag(tagValue)
         }
         tags.value = ""
+    }
+    else if (e.code === "Space") {
+        return e.preventDefault()
     }
 })
 
@@ -54,11 +60,17 @@ function getTags() {
     })
 }
 
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { task: "is_tag_present" }, function (response) {
-        console.log(response.result);
+function getResult() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { task: "is_tag_present" }, function (response) {
+            console.log(response.result);
+            resultSpan.innerHTML = response.result
+        });
     });
-});
+}
+getResult()
+
+searchButton.addEventListener('click', getResult)
 // chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 //     // console.log("request from: ", request.from)
 //     // console.log(request, sender, sendResponse);
