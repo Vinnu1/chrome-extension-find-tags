@@ -64,7 +64,16 @@ function getResult() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, { task: "is_tag_present" }, function (response) {
             console.log(response.result);
-            resultSpan.innerHTML = response.result
+            let result = response.result
+            if (result === "No Tags Present") {
+                resultSpan.innerHTML = "Enter Tags Above for Searching &uarr;"
+            }
+            else if (result.length === 0) {
+                resultSpan.innerHTML = "No Tags Found."
+            }
+            else {
+                resultSpan.innerHTML = result.toString() + " found!"
+            }
         });
     });
 }

@@ -1,4 +1,4 @@
-
+console.log('content script runs')
 let bodyText = document.body.innerText.toLowerCase()
 let currentTags
 
@@ -29,11 +29,19 @@ chrome.runtime.onMessage.addListener(
 function DoesTagsMatch(tags) {
     //return "async works"
     //var bots = ["FacebookExternalHit", "LinkedInBot", "TwitterBot", "Baiduspider"];
+    let matchedTags = []
+    //let isTagPresent = false
     console.log("tags: ", tags)
     console.log(bodyText)
-    let isTagPresent = tags.some(function (tagName) {
-        return bodyText.indexOf(tagName) !== -1;
-    });
-    return isTagPresent
+    for (i = 0; i < tags.length; i++) {
+        if (bodyText.indexOf(tags[i]) !== -1) {
+            //isTagPresent = true
+            matchedTags.push(tags[i])
+        }
+    }
+    // matchedTags = tags.reduce(function (tagName) {
+    //     return bodyText.indexOf(tagName) !== -1;
+    // });
+    return matchedTags
 }
 
