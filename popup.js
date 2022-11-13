@@ -2,6 +2,7 @@ console.log("popup")
 let changeColor = document.getElementById("changeColor")
 const resultSpan = document.getElementById("resultSpan")
 const searchButton = document.getElementById("searchButton")
+const closeButton = document.getElementById("closeButton")
 
 //code related to tags
 const tags = document.getElementById("tags")
@@ -70,6 +71,7 @@ function getResult() {
             }
             else if (result.length === 0) {
                 resultSpan.innerHTML = "No Tags Found."
+                closeButton.classList.remove("closeBtn")
             }
             else {
                 resultSpan.innerHTML = result.toString() + " found!"
@@ -80,6 +82,13 @@ function getResult() {
 getResult()
 
 searchButton.addEventListener('click', getResult)
+closeButton.addEventListener('click', closeTab)
+
+function closeTab() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.remove(tabs[0].id);
+    });
+}
 // chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 //     // console.log("request from: ", request.from)
 //     // console.log(request, sender, sendResponse);
