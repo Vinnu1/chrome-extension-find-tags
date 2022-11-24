@@ -27,21 +27,13 @@ chrome.runtime.onMessage.addListener(
     })
 
 function DoesTagsMatch(tags) {
-    //return "async works"
-    //var bots = ["FacebookExternalHit", "LinkedInBot", "TwitterBot", "Baiduspider"];
     let matchedTags = []
-    //let isTagPresent = false
     console.log("tags: ", tags)
     console.log(bodyText)
     for (i = 0; i < tags.length; i++) {
         if (bodyText.indexOf(tags[i]) !== -1) {
-            //isTagPresent = true
             matchedTags.push(tags[i])
         }
     }
-    // matchedTags = tags.reduce(function (tagName) {
-    //     return bodyText.indexOf(tagName) !== -1;
-    // });
     return matchedTags
 }
-
